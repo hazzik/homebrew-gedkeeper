@@ -9,7 +9,7 @@ cask "gedkeeper" do
   homepage "https://github.com/Serg-Norseman/GEDKeeper"
 
   # Install the .app bundle into /Applications
-  app "GEDKeeper.app"
+  app "GEDKeeper3.app"
 
   # Optional: zap/uninstall stanza if needed
   uninstall quit: "org.gedkeeper.GEDKeeper"
