@@ -14,6 +14,8 @@ Make sure you have [Homebrew](https://brew.sh/) installed on your Mac.
 brew install --cask hazzik/gedkeeper/gedkeeper3 --no-quarantine
 ```
 
+**:warning: Warning:** The `--no-quarantine` flag is required because GEDKeeper is not code-signed by Apple. Without this flag, macOS Gatekeeper will prevent the application from running, displaying a security warning that the app "cannot be opened because the developer cannot be verified."
+
 ## Usage
 
 After installation, you can launch GEDKeeper from:
