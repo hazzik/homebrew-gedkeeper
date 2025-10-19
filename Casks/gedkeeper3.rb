@@ -1,4 +1,4 @@
-cask "gedkeeper" do
+cask "gedkeeper3" do
   version "3.12.0"
   sha256 "3e66215e67e1eb28b2bc0dce9542ae465946a2251d29c4870d70ca13cce65f9c"
 
