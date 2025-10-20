@@ -1,5 +1,7 @@
 # Homebrew GEDKeeper Tap
 
+[![Update GEDKeeper Version](https://github.com/hazzik/homebrew-gedkeeper/actions/workflows/update.yml/badge.svg)](https://github.com/hazzik/homebrew-gedkeeper/actions/workflows/update.yml)
+
 A [Homebrew](https://brew.sh/) tap for [GEDKeeper](https://github.com/Serg-Norseman/GEDKeeper), a comprehensive program for working with personal genealogical databases.
 
 ## Installation
