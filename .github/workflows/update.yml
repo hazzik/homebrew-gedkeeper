@@ -1,0 +1,70 @@
+name: Update GEDKeeper
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get version
+        id: version
+        run: |
+          source ./scripts/get-latest-version.sh
+          echo "latest_version=$LATEST_VERSION" >> $GITHUB_OUTPUT
+          echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+          echo "sha256=$SHA256" >> $GITHUB_OUTPUT
+
+      - name: Create branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin
+          git switch "$BRANCH" 2>/dev/null || git switch -c "$BRANCH"
+        env:
+          BRANCH: chore/bump-gedkeeper-v${{ steps.version.outputs.latest_version }}
+
+      - name: Create cask
+        run: ./scripts/update-cask.sh
+        env:
+          LATEST_VERSION: ${{ steps.version.outputs.latest_version }}
+          SHA256: ${{ steps.version.outputs.sha256 }}
+
+      - name: Commit
+        run: |
+          git add Casks/gedkeeper3.rb
+          git commit -m "chore: bump GEDKeeper3 to v$LATEST_VERSION"
+        env:
+          LATEST_VERSION: ${{ steps.version.outputs.latest_version }}
+
+      - name: Push
+        run: git push origin "$BRANCH"
+        env:
+          BRANCH: chore/bump-gedkeeper-v${{ steps.version.outputs.latest_version }}
+
+      - name: Create PR if not exists
+        run: |
+          if gh pr list --head "$BRANCH" --json number --jq '.[0]' | grep -q '[0-9]'; then
+            echo "A pull request for branch $BRANCH already exists. Skipping PR creation."
+            exit 0
+          fi
+
+          gh pr create \
+            --title "chore: bump GEDKeeper3 to v$LATEST_VERSION" \
+            --body "Update from v$CURRENT_VERSION to v$LATEST_VERSION.
+        env:
+          LATEST_VERSION: ${{ steps.version.outputs.latest_version }}
+          CURRENT_VERSION: ${{ steps.version.outputs.current_version }}
+          SHA256: ${{ steps.version.outputs.sha256 }}
+          BRANCH: chore/bump-gedkeeper-v${LATEST_VERSION}
