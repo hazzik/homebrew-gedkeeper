@@ -113,7 +113,6 @@ jobs:
           git push origin "$BRANCH"
 
       - name: Create PR if not exists
-        if: steps.changes.outputs.has_changes == 'true'
         run: |
           if gh pr list --head "$BRANCH" --json number --jq '.[0]' | grep -q '[0-9]'; then
             echo "A pull request for branch $BRANCH already exists. Skipping PR creation."
@@ -123,4 +122,5 @@ jobs:
           gh pr create \
             --title "chore: bump GEDKeeper3 to v$LATEST_VERSION" \
             --body "Update from v$CURRENT_VERSION to v$LATEST_VERSION." \
+            --reviewer hazzik \
             --base master
