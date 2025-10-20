@@ -50,7 +50,7 @@ jobs:
 
   update:
     needs: get-version
-    # if: needs.get-version.outputs.latest_version != needs.get-version.outputs.current_version
+    if: needs.get-version.outputs.latest_version != needs.get-version.outputs.current_version
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ github.token }}
