@@ -104,8 +104,8 @@ jobs:
 
       - name: Create PR
         run: |
-          if gh pr list --head "$BRANCH" --json number --jq '.[0]' | grep -q '[0-9]'; then
-            echo "A pull request for branch $BRANCH already exists. Skipping PR creation."
+          if gh pr list --head "$BRANCH" --json number --jq '.[0].number'; then
+            echo "A pull request for branch $BRANCH already exists."
             exit 0
           fi
 
