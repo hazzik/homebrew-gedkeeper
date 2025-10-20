@@ -96,16 +96,8 @@ jobs:
           end
           EOF
 
-      - name: Commit and push
-        run: |
-          if git diff --quiet; then
-            echo "No changes to commit. Skipping commit and push."
-          else
-            echo "Changes detected. Committing and pushing."
-            git add Casks/gedkeeper3.rb
-            git commit -m "chore: bump GEDKeeper3 to v$LATEST_VERSION"
-            git push origin "$BRANCH"
-          fi
+          git commit -am "chore: bump GEDKeeper3 to v$LATEST_VERSION"
+          git push origin "$BRANCH"
 
       - name: Create PR
         run: |
