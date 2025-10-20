@@ -4,7 +4,7 @@ cask "gedkeeper3" do
 
   url "https://github.com/Serg-Norseman/GEDKeeper/releases/download/v#{version}/gedkeeper_#{version}.dmg"
 
-  name "GEDKeeper"
+  name "GEDKeeper3"
   desc "Program for working with personal genealogical databases"
   homepage "https://github.com/Serg-Norseman/GEDKeeper"
 
