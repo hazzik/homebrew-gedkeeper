@@ -96,23 +96,18 @@ jobs:
           end
           EOF
 
-      - name: Check for changes
-        id: changes
+      - name: Commit and push
         run: |
           if git diff --quiet; then
-            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "No changes to commit. Skipping commit and push."
           else
-            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "Changes detected. Committing and pushing."
+            git add Casks/gedkeeper3.rb
+            git commit -m "chore: bump GEDKeeper3 to v$LATEST_VERSION"
+            git push origin "$BRANCH"
           fi
 
-      - name: Commit and push
-        if: steps.changes.outputs.has_changes == 'true'
-        run: |
-          git add Casks/gedkeeper3.rb
-          git commit -m "chore: bump GEDKeeper3 to v$LATEST_VERSION"
-          git push origin "$BRANCH"
-
-      - name: Create PR if not exists
+      - name: Create PR
         run: |
           if gh pr list --head "$BRANCH" --json number --jq '.[0]' | grep -q '[0-9]'; then
             echo "A pull request for branch $BRANCH already exists. Skipping PR creation."
