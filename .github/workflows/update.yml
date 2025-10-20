@@ -11,8 +11,12 @@ permissions:
   pull-requests: write
 
 jobs:
-  update:
+  get-version:
     runs-on: ubuntu-latest
+    outputs:
+      latest_version: ${{ steps.version.outputs.latest_version }}
+      current_version: ${{ steps.version.outputs.current_version }}
+      sha256: ${{ steps.version.outputs.sha256 }}
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
@@ -27,21 +31,32 @@ jobs:
           echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
           echo "sha256=$SHA256" >> $GITHUB_OUTPUT
 
+  update:
+    needs: get-version
+    # if: needs.get-version.outputs.latest_version != needs.get-version.outputs.current_version
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      CURRENT_VERSION: ${{ needs.get-version.outputs.current_version }}
+      LATEST_VERSION: ${{ needs.get-version.outputs.latest_version }}
+      SHA256: ${{ needs.get-version.outputs.sha256 }}
+      BRANCH: chore/bump-gedkeeper-v${{ needs.get-version.outputs.latest_version }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: master
+
       - name: Create branch
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git fetch origin
-          git checkout master
           git switch "$BRANCH" 2>/dev/null || git switch -c "$BRANCH"
-        env:
-          BRANCH: chore/bump-gedkeeper-v${{ steps.version.outputs.latest_version }}
 
       - name: Create cask
         run: ./scripts/update-cask.sh
-        env:
-          LATEST_VERSION: ${{ steps.version.outputs.latest_version }}
-          SHA256: ${{ steps.version.outputs.sha256 }}
 
       - name: Check for changes
         id: changes
@@ -52,21 +67,15 @@ jobs:
             echo "has_changes=true" >> $GITHUB_OUTPUT
           fi
 
-      - name: Commit
+      - name: Commit and push
         if: steps.changes.outputs.has_changes == 'true'
         run: |
           git add Casks/gedkeeper3.rb
           git commit -m "chore: bump GEDKeeper3 to v$LATEST_VERSION"
-        env:
-          LATEST_VERSION: ${{ steps.version.outputs.latest_version }}
-
-      - name: Push
-        if: steps.changes.outputs.has_changes == 'true'
-        run: git push origin "$BRANCH"
-        env:
-          BRANCH: chore/bump-gedkeeper-v${{ steps.version.outputs.latest_version }}
+          git push origin "$BRANCH"
 
       - name: Create PR if not exists
+        if: steps.changes.outputs.has_changes == 'true'
         run: |
           if gh pr list --head "$BRANCH" --json number --jq '.[0]' | grep -q '[0-9]'; then
             echo "A pull request for branch $BRANCH already exists. Skipping PR creation."
@@ -75,12 +84,4 @@ jobs:
 
           gh pr create \
             --title "chore: bump GEDKeeper3 to v$LATEST_VERSION" \
-            --body "Update from v$CURRENT_VERSION to v$LATEST_VERSION." \
-            --base master \
-            --head "$BRANCH"
-
-        env:
-          LATEST_VERSION: ${{ steps.version.outputs.latest_version }}
-          CURRENT_VERSION: ${{ steps.version.outputs.current_version }}
-          SHA256: ${{ steps.version.outputs.sha256 }}
-          BRANCH: chore/bump-gedkeeper-v${{ steps.version.outputs.latest_version }}
+            --body "Update from v$CURRENT_VERSION to v$LATEST_VERSION."
