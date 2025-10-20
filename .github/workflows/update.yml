@@ -55,7 +55,7 @@ jobs:
           git fetch origin
           git switch "$BRANCH" 2>/dev/null || git switch -c "$BRANCH"
 
-      - name: Create cask
+      - name: Update cask
         run: ./scripts/update-cask.sh
 
       - name: Check for changes
