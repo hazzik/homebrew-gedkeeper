@@ -99,7 +99,7 @@ jobs:
       - name: Commit and push changes
         run: |
           git add Casks/gedkeeper3.rb
-          git commit -m "chore: bump GEDKeeper3 to v$LATEST_VERSION" || echo "Nothing to commit"
+          git commit -m "chore: bump GEDKeeper3 to v$LATEST_VERSION" || true
           git push origin "$BRANCH"
 
       - name: Create PR
