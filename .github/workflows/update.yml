@@ -23,10 +23,27 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Get version
+      - name: Get latest version
         id: version
         run: |
-          source ./scripts/get-latest-version.sh
+          RELEASE_JSON=$(gh release view --repo Serg-Norseman/GEDKeeper --json tagName,assets)
+          LATEST_TAG=$(echo "$RELEASE_JSON" | jq -r '.tagName')
+          LATEST_VERSION=${LATEST_TAG#v}
+
+          CURRENT_VERSION=$(grep -E '^\s*version\s+' Casks/gedkeeper3.rb | cut -d'"' -f2)
+
+          echo "Current version: $CURRENT_VERSION"
+          echo "Latest version: $LATEST_VERSION"
+
+          DIGEST=$(echo "$RELEASE_JSON" | jq -r --arg version "$LATEST_VERSION" '.assets[] | select(.name == "gedkeeper_" + $version + ".dmg") | .digest')
+          if [ "$DIGEST" = "null" ] || [ -z "$DIGEST" ]; then
+            echo "Error: SHA256 digest not found in release assets for gedkeeper_${LATEST_VERSION}.dmg"
+            exit 1
+          fi
+
+          SHA256=${DIGEST#sha256:}
+          echo "SHA256: $SHA256"
+
           echo "latest_version=$LATEST_VERSION" >> $GITHUB_OUTPUT
           echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
           echo "sha256=$SHA256" >> $GITHUB_OUTPUT
