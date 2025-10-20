@@ -41,7 +41,17 @@ jobs:
           LATEST_VERSION: ${{ steps.version.outputs.latest_version }}
           SHA256: ${{ steps.version.outputs.sha256 }}
 
+      - name: Check for changes
+        id: changes
+        run: |
+          if git diff --quiet; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+
       - name: Commit
+        if: steps.changes.outputs.has_changes == 'true'
         run: |
           git add Casks/gedkeeper3.rb
           git commit -m "chore: bump GEDKeeper3 to v$LATEST_VERSION"
@@ -49,6 +59,7 @@ jobs:
           LATEST_VERSION: ${{ steps.version.outputs.latest_version }}
 
       - name: Push
+        if: steps.changes.outputs.has_changes == 'true'
         run: git push origin "$BRANCH"
         env:
           BRANCH: chore/bump-gedkeeper-v${{ steps.version.outputs.latest_version }}
