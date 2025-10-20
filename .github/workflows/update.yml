@@ -45,14 +45,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          ref: master
 
       - name: Create branch
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git fetch origin
+          git checkout master
           git switch "$BRANCH" 2>/dev/null || git switch -c "$BRANCH"
 
       - name: Update cask
@@ -84,4 +83,5 @@ jobs:
 
           gh pr create \
             --title "chore: bump GEDKeeper3 to v$LATEST_VERSION" \
-            --body "Update from v$CURRENT_VERSION to v$LATEST_VERSION."
+            --body "Update from v$CURRENT_VERSION to v$LATEST_VERSION." \
+            --base master
