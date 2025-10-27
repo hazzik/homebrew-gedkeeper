@@ -1,0 +1,72 @@
+name: Test Cask
+
+on:
+  pull_request:
+    paths:
+      - 'Casks/**'
+      - '.github/workflows/test-cask.yml'
+  workflow_dispatch:
+  push:
+    branches: [ master, main ]
+    paths:
+      - 'Casks/**'
+
+jobs:
+  test-cask:
+    runs-on: macos-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+
+      - name: Add tap for testing
+        run: brew tap --force homebrew/test ${{ github.workspace }}
+
+      - name: Validate cask syntax
+        run: brew style Casks/gedkeeper3.rb
+
+      - name: Audit cask
+        run: brew audit --cask homebrew/test/gedkeeper3
+
+      - name: Test download and SHA256
+        run: brew cask fetch homebrew/test/gedkeeper3
+
+      - name: Install cask
+        run: brew install --cask homebrew/test/gedkeeper3 --no-quarantine
+
+      - name: Verify installation
+        run: |
+          set -e
+          if [ ! -d "/Applications/GEDKeeper3.app" ]; then
+            echo "GEDKeeper3.app not found in /Applications/"
+            exit 1
+          fi
+          
+          echo "GEDKeeper3.app successfully installed"
+          ls -la "/Applications/GEDKeeper3.app"
+          
+          if [ ! -f "/Applications/GEDKeeper3.app/Contents/Info.plist" ]; then
+            echo "Info.plist not found - app bundle might be malformed"
+            exit 1
+          fi
+
+      - name: Test uninstallation
+        run: |
+          set -e
+          brew uninstall --cask homebrew/test/gedkeeper3
+          
+          if [ -d "/Applications/GEDKeeper3.app" ]; then
+            echo "GEDKeeper3.app still exists after uninstall"
+            exit 1
+          fi
+          
+          echo "GEDKeeper3.app successfully uninstalled"
+
+      - name: Clean up
+        if: always()
+        run: |
+          brew untap homebrew/test || true
+          rm -rf "/Applications/GEDKeeper3.app" 2>/dev/null || true
