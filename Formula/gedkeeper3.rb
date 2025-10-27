@@ -12,7 +12,7 @@ class Gedkeeper3 < Formula
     cd "projects/GKv3" do
       system "dotnet", "build", "GEDKeeper3.sln", "-p:Configuration=Release", "-p:Platform=MacOS",
 "-p:MacBuildBundle=true"
-      
+
       prefix.install "bin/MacOS/Release/GEDKeeper3.app"
     end
 
