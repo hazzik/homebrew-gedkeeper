@@ -29,7 +29,7 @@ jobs:
         run: brew audit --formula homebrew/test/gedkeeper3
 
       - name: Install formula
-        run: brew install --formula homebrew/test/gedkeeper3
+        run: brew install --formula --verbose homebrew/test/gedkeeper3
 
       - name: Verify installation
         run: |
@@ -42,13 +42,13 @@ jobs:
           echo "GEDKeeper3.app successfully installed to formula prefix"
           ls -la "$(brew --prefix)/opt/gedkeeper3/"
           
-          if [ ! -L "/Applications/GEDKeeper.app" ]; then
-            echo "Symlink to /Applications/GEDKeeper.app not found"
+          if [ ! -L "/Applications/GEDKeeper3.app" ]; then
+            echo "Symlink to /Applications/GEDKeeper3.app not found"
             exit 1
           fi
           
           echo "Symlink to Applications folder created successfully"
-          ls -la "/Applications/GEDKeeper.app"
+          ls -la "/Applications/GEDKeeper3.app"
 
       - name: Run formula test
         run: brew test --formula homebrew/test/gedkeeper3
@@ -63,7 +63,7 @@ jobs:
             exit 1
           fi
           
-          if [ -L "/Applications/GEDKeeper.app" ]; then
+          if [ -L "/Applications/GEDKeeper3.app" ]; then
             echo "Symlink still exists after uninstall"
             exit 1
           fi
