@@ -19,14 +19,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # - name: Setup Homebrew
-      #   uses: Homebrew/actions/setup-homebrew@master
+      - name: Validate cask syntax
+        run: brew style Casks/gedkeeper3.rb
 
       - name: Add tap for testing
         run: brew tap --force homebrew/test ${{ github.workspace }}
-
-      - name: Validate cask syntax
-        run: brew style Casks/gedkeeper3.rb
 
       - name: Audit cask
         run: brew audit --cask homebrew/test/gedkeeper3

@@ -19,23 +19,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Homebrew
-        uses: Homebrew/actions/setup-homebrew@master
+      - name: Validate formula syntax
+        run: brew style Formula/gedkeeper3.rb
 
       - name: Add tap for testing
         run: brew tap --force homebrew/test ${{ github.workspace }}
 
-      - name: Validate formula syntax
-        run: brew style Formula/gedkeeper3.rb
-
       - name: Audit formula
-        run: brew audit homebrew/test/gedkeeper3
-
-      - name: Install dependencies
-        run: brew install dotnet
+        run: brew audit --formula homebrew/test/gedkeeper3
 
       - name: Install formula
-        run: brew install homebrew/test/gedkeeper3
+        run: brew install --formula homebrew/test/gedkeeper3
 
       - name: Verify installation
         run: |
@@ -57,12 +51,12 @@ jobs:
           ls -la "/Applications/GEDKeeper.app"
 
       - name: Run formula test
-        run: brew test homebrew/test/gedkeeper3
+        run: brew test --formula homebrew/test/gedkeeper3
 
       - name: Test uninstallation
         run: |
           set -e
-          brew uninstall homebrew/test/gedkeeper3
+          brew uninstall --formula homebrew/test/gedkeeper3
           
           if [ -d "$(brew --prefix)/opt/gedkeeper3" ]; then
             echo "Formula files still exist after uninstall"
