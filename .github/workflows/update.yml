@@ -78,7 +78,6 @@ jobs:
             sha256 "$SHA256"
 
             url "https://github.com/Serg-Norseman/GEDKeeper/releases/download/v#{version}/gedkeeper_#{version}.dmg"
-
             name "GEDKeeper3"
             desc "Program for working with personal genealogical databases"
             homepage "https://github.com/Serg-Norseman/GEDKeeper"
@@ -88,6 +87,7 @@ jobs:
 
             # Optional: zap/uninstall stanza if needed
             uninstall quit: "org.gedkeeper.GEDKeeper"
+
             zap       trash: [
               # "~/Library/Application Support/GEDKeeper",
               # "~/Library/Preferences/org.gedkeeper.GEDKeeper.plist",
