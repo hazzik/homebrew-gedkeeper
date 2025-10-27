@@ -10,9 +10,11 @@ class Gedkeeper3 < Formula
 
   def install
     cd "projects/GKv3" do
-      system "dotnet", "build", "GEDKeeper3.sln", "-p:Configuration=Release", "-p:Platform=MacOS",
-"-p:MacBuildBundle=true"
-
+      system "dotnet", "build", "GEDKeeper3.sln", "-p:Configuration=Release", "-p:Platform=MacOS", "-p:MacBuildBundle=true"
+      
+      # Debug: Show what was actually built in current directory
+      system "find", ".", "-name", "*.app", "-type", "d"
+      
       prefix.install "bin/MacOS/Release/GEDKeeper3.app"
     end
 
