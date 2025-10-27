@@ -32,7 +32,7 @@ jobs:
         run: brew audit --cask homebrew/test/gedkeeper3
 
       - name: Test download and SHA256
-        run: brew cask fetch homebrew/test/gedkeeper3
+        run: brew fetch --cask homebrew/test/gedkeeper3
 
       - name: Install cask
         run: brew install --cask homebrew/test/gedkeeper3 --no-quarantine
