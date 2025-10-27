@@ -9,14 +9,14 @@ class Gedkeeper3 < Formula
   depends_on "dotnet"
 
   def install
+    configuration = "Release"
+    runtime = Hardware::CPU.arm? ? "osx-arm64" : "osx-x64"
+    
     cd "projects/GKv3/GEDKeeper3" do
-      system "dotnet", "build", ".", "-p:Configuration=Release", "-p:Platform=MacOS",
-"-p:MacBuildBundle=true"
+      system "dotnet", "build", ".", "-p:Configuration=#{configuration}", "-p:Platform=MacOS",
+"-p:MacBuildBundle=true", "-r:#{runtime}"
 
-      # Debug: Show what was actually built in current directory
-      system "find", ".", "-name", "*.app", "-type", "d"
-
-      prefix.install "bin/MacOS/Release/GEDKeeper3.app"
+      prefix.install "bin/MacOS/#{configuration}/#{runtime}/GEDKeeper3.app"
     end
 
     applications_dir = "/Applications"
