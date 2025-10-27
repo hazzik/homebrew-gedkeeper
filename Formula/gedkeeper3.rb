@@ -16,7 +16,7 @@ class Gedkeeper3 < Formula
       # Debug: Show what was actually built in current directory
       system "find", ".", "-name", "*.app", "-type", "d"
 
-      prefix.install "bin/MacOS/Release/GEDKeeper3.app"
+      prefix.install "GEDKeeper3/bin/MacOS/Release/GEDKeeper3.app"
     end
 
     applications_dir = "/Applications"
