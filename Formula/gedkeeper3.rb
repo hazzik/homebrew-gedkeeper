@@ -9,14 +9,12 @@ class Gedkeeper3 < Formula
   depends_on "dotnet"
 
   def install
-    system "git", "submodule", "update", "--init", "--recursive"
-
     cd "projects/GKv3" do
       system "dotnet", "build", "GEDKeeper3.sln", "-p:Configuration=Release", "-p:Platform=MacOS",
 "-p:MacBuildBundle=true"
+      
+      prefix.install "bin/MacOS/Release/GEDKeeper3.app"
     end
-
-    prefix.install "bin/MacOS/Release/GEDKeeper3.app"
 
     applications_dir = "/Applications"
     ln "-s", "#{prefix}/GEDKeeper.app", "#{applications_dir}/GEDKeeper.app"
