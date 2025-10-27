@@ -12,11 +12,27 @@ Make sure you have [Homebrew](https://brew.sh/) installed on your Mac.
 
 ### Install GEDKeeper
 
+You can install GEDKeeper in two ways:
+
+#### Option 1: Cask (Recommended - Pre-built Binary)
+
 ```bash
 brew install --cask hazzik/gedkeeper/gedkeeper3 --no-quarantine
 ```
 
 **:warning: Warning:** The `--no-quarantine` flag is required because GEDKeeper is not code-signed by Apple. Without this flag, macOS Gatekeeper will prevent the application from running, displaying a security warning that the app "cannot be opened because the developer cannot be verified."
+
+#### Option 2: Formula (Build from Source)
+
+```bash
+brew install hazzik/gedkeeper/gedkeeper3
+```
+
+This will build GEDKeeper from source code. This option:
+- Requires `.NET` (automatically installed as a dependency)
+- Takes longer as it compiles from source
+- Always gets the latest development version
+- May be more suitable for developers or users who prefer building from source
 
 ## Usage
 
@@ -29,17 +45,30 @@ After installation, you can launch GEDKeeper from:
 
 To update GEDKeeper to the latest version:
 
+**For cask installation:**
 ```bash
 brew update
 brew upgrade --cask gedkeeper3
+```
+
+**For formula installation:**
+```bash
+brew update
+brew upgrade gedkeeper3
 ```
 
 ## Uninstalling
 
 To remove GEDKeeper:
 
+**For cask installation:**
 ```bash
 brew uninstall --cask gedkeeper3
+```
+
+**For formula installation:**
+```bash
+brew uninstall gedkeeper3
 ```
 
 To also remove this tap:
@@ -50,11 +79,15 @@ brew untap hazzik/gedkeeper
 
 ## About This Tap
 
-This tap provides the macOS version of GEDKeeper as a Homebrew cask. The software is automatically downloaded from the official [GEDKeeper releases](https://github.com/Serg-Norseman/GEDKeeper/releases) on GitHub.
+This tap provides the macOS version of GEDKeeper in two formats:
 
-### Current Version
+- **Cask**: Pre-built application downloaded from the official [GEDKeeper releases](https://github.com/Serg-Norseman/GEDKeeper/releases) on GitHub
+- **Formula**: Built from source code using the latest development version from the [GEDKeeper repository](https://github.com/Serg-Norseman/GEDKeeper)
 
-- **GEDKeeper**: v3.12.0
+### Current Versions
+
+- **GEDKeeper Cask**: v3.12.0 (stable release)
+- **GEDKeeper Formula**: v3.13.0-dev (development build)
 
 ## Links
 
@@ -64,7 +97,7 @@ This tap provides the macOS version of GEDKeeper as a Homebrew cask. The softwar
 
 ## Contributing
 
-If you notice any issues with the cask or would like to contribute improvements:
+If you notice any issues with the cask or formula, or would like to contribute improvements:
 
 1. Fork this repository
 2. Create a feature branch
