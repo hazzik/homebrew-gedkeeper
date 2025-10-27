@@ -19,8 +19,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Homebrew
-        uses: Homebrew/actions/setup-homebrew@master
+      # - name: Setup Homebrew
+      #   uses: Homebrew/actions/setup-homebrew@master
 
       - name: Add tap for testing
         run: brew tap --force homebrew/test ${{ github.workspace }}
