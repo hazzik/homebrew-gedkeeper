@@ -1,9 +1,9 @@
 cask "gedkeeper3" do
-  version "3.12.0"
-  sha256 "3e66215e67e1eb28b2bc0dce9542ae465946a2251d29c4870d70ca13cce65f9c"
+  version "3.13.0"
+  sha256 "e07d437bae4e2b3fa1f535f2b46b9e938ed013729c9911ff09c7ce94ec2bdc35"
 
   url "https://github.com/Serg-Norseman/GEDKeeper/releases/download/v#{version}/gedkeeper_#{version}.dmg"
-  name "GEDKeeper"
+  name "GEDKeeper3"
   desc "Program for working with personal genealogical databases"
   homepage "https://github.com/Serg-Norseman/GEDKeeper"
 
