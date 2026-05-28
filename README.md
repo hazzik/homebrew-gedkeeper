@@ -13,10 +13,18 @@ Make sure you have [Homebrew](https://brew.sh/) installed on your Mac.
 ### Install GEDKeeper
 
 ```bash
-brew install --cask hazzik/gedkeeper/gedkeeper3 --no-quarantine
+brew install --cask hazzik/gedkeeper/gedkeeper3
 ```
 
-**:warning: Warning:** The `--no-quarantine` flag is required because GEDKeeper is not code-signed by Apple. Without this flag, macOS Gatekeeper will prevent the application from running, displaying a security warning that the app "cannot be opened because the developer cannot be verified."
+**:warning: Warning:** The tap implements a post-install workaround that removes the `com.apple.quarantine` attribute from the `GEDKeeper3.app` because GEDKeeper is not code-signed by Apple. Without this workaround, macOS Gatekeeper will prevent the application from running, displaying a security warning that the app "cannot be opened because the developer cannot be verified."
+
+This bypasses Gatekeeper's first-launch quarantine check. Install only if you trust the upstream release source.
+
+If you already installed an older version and still get a Gatekeeper warning, run:
+
+```sh
+xattr -dr com.apple.quarantine /Applications/GEDKeeper3.app
+```
 
 ## Usage
 
@@ -52,9 +60,6 @@ brew untap hazzik/gedkeeper
 
 This tap provides the macOS version of GEDKeeper as a Homebrew cask. The software is automatically downloaded from the official [GEDKeeper releases](https://github.com/Serg-Norseman/GEDKeeper/releases) on GitHub.
 
-### Current Version
-
-- **GEDKeeper**: v3.12.0
 
 ## Links
 

@@ -35,7 +35,7 @@ jobs:
         run: brew fetch --cask homebrew/test/gedkeeper3
 
       - name: Install cask
-        run: brew install --cask homebrew/test/gedkeeper3 --no-quarantine
+        run: brew install --cask homebrew/test/gedkeeper3
 
       - name: Verify installation
         run: |
@@ -47,6 +47,13 @@ jobs:
           
           echo "GEDKeeper3.app successfully installed"
           ls -la "/Applications/GEDKeeper3.app"
+
+          if xattr "/Applications/GEDKeeper3.app" | grep -q 'com.apple.quarantine'; then
+            echo 'com.apple.quarantine still present on GEDKeeper3.app'
+            exit 1
+          fi
+
+          echo 'com.apple.quarantine successfully removed from GEDKeeper3.app'
           
           if [ ! -f "/Applications/GEDKeeper3.app/Contents/Info.plist" ]; then
             echo "Info.plist not found - app bundle might be malformed"
