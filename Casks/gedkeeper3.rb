@@ -7,8 +7,17 @@ cask "gedkeeper3" do
   desc "Program for working with personal genealogical databases"
   homepage "https://github.com/Serg-Norseman/GEDKeeper"
 
+  depends_on :macos
+
   # Install the .app bundle into /Applications
   app "GEDKeeper3.app"
+
+  # Homebrew removed `--no-quarantine`, so clear the quarantine xattr
+  # from the installed app to keep launch behavior unchanged.
+  postflight do
+    system_command "/usr/bin/xattr",
+                   args: ["-dr", "com.apple.quarantine", "#{appdir}/GEDKeeper3.app"]
+  end
 
   # Optional: zap/uninstall stanza if needed
   uninstall quit: "org.gedkeeper.GEDKeeper"
