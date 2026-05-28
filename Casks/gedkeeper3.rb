@@ -1,6 +1,6 @@
 cask "gedkeeper3" do
-  version "3.13.0"
-  sha256 "e07d437bae4e2b3fa1f535f2b46b9e938ed013729c9911ff09c7ce94ec2bdc35"
+  version "3.15.0"
+  sha256 "17dd03681f1f8b759f7b321efaf6fb8fb11be1415fafa811df6ca339d69e40af"
 
   url "https://github.com/Serg-Norseman/GEDKeeper/releases/download/v#{version}/gedkeeper_#{version}.dmg"
   name "GEDKeeper3"
