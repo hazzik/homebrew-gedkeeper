@@ -7,6 +7,8 @@ cask "gedkeeper3" do
   desc "Program for working with personal genealogical databases"
   homepage "https://github.com/Serg-Norseman/GEDKeeper"
 
+  depends_on :macos
+
   # Install the .app bundle into /Applications
   app "GEDKeeper3.app"
 
